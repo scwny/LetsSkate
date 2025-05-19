@@ -21,7 +21,7 @@ export default function App() {
     <AuthProvider>
       <BrowserRouter>
         {/* ——— Header/Nav ——— */}
-        <header className="flex items-center justify-between bg-gray-800 text-white px-6 py-4 bg-red-500">
+        <header className="flex items-center justify-between bg-gray-800 text-white px-6 py-4">
           <h1 className="text-2xl font-semibold">LetsSkate</h1>
           <nav className="flex space-x-4">
             <Link
