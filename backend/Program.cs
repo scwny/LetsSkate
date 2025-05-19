@@ -27,8 +27,8 @@ app.MapGet("/api/hello", () => "Hello from .NET API!")
    .WithOpenApi();
 
 // 4. Hello endpoint
-app.MapGet("/api/hello", () => "Hello from .NET API!")
-   .WithName("GetHello")
+app.MapGet("/ping", () => "pong!")
+   .WithName("ping")
    .WithOpenApi();
 
 app.Run();

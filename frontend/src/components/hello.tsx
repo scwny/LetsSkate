@@ -1,4 +1,3 @@
-import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 
 // Fetch function
@@ -9,7 +8,10 @@ const fetchHello = async (): Promise<string> => {
 };
 
 export function Hello() {
-  const { data, isLoading, error } = useQuery(['hello'], fetchHello);
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['hello'],
+    queryFn: fetchHello
+  });
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {(error as Error).message}</div>;
