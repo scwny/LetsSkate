@@ -11,6 +11,22 @@ builder.Services.AddCors(opts =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services
+  .AddDbContext<ApplicationDbContext>(opts => /* your connection */)
+  .AddIdentity<ApplicationUser, IdentityRole>(opts => {
+    opts.User.RequireUniqueEmail = true;
+  })
+  .AddEntityFrameworkStores<ApplicationDbContext>()
+  .AddDefaultTokenProviders();
+
+builder.Services.ConfigureApplicationCookie(opts => {
+    opts.Cookie.HttpOnly = true;
+    opts.Cookie.SameSite = SameSiteMode.Strict;
+    opts.ExpireTimeSpan = TimeSpan.FromDays(7);
+    opts.LoginPath = "/Account/Login";          // your login route
+    opts.LogoutPath = "/Account/Logout";
+});
+
 var app = builder.Build();
 
 // 3. Middleware
