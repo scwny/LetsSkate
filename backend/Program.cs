@@ -45,33 +45,34 @@ app.UseSwaggerUI();
 // 5. Authentication & Authorization
 app.UseAuthentication();
 app.UseAuthorization();
+// 7. Auth Endpoints
+app.MapPost("/api/account/register", async (UserManager<IdentityUser> users, RegisterModel model) =>
+{
+    var user = new IdentityUser { UserName = model.Email, Email = model.Email };
+    var result = await users.CreateAsync(user, model.Password);
+    return result.Succeeded ? Results.Ok() : Results.BadRequest(result.Errors);
+})
+.WithOpenApi();
 
-
-app.MapPost("/api/account/login", async (
-    SignInManager<IdentityUser> signin,
-    LoginModel creds) =>
+app.MapPost("/api/account/login", async (SignInManager<IdentityUser> signin, LoginModel creds) =>
 {
     var result = await signin.PasswordSignInAsync(
-      creds.Email, creds.Password,
-      creds.RememberMe, lockoutOnFailure: false);
+        creds.Email, creds.Password, creds.RememberMe, lockoutOnFailure: false);
+    return result.Succeeded ? Results.Ok() : Results.Unauthorized();
+})
+.WithOpenApi();
 
-    return result.Succeeded
-      ? Results.Ok()
-      : Results.Unauthorized();
-});
-
-app.MapPost("/api/account/logout", async (
-    SignInManager<IdentityUser> signin) =>
+app.MapPost("/api/account/logout", async (SignInManager<IdentityUser> signin) =>
 {
     await signin.SignOutAsync();
     return Results.Ok();
-});
+})
+.WithOpenApi();
 
-// 7. Your existing Hello endpoint
-app.MapGet("/api/hello", () => "Hello from .NET API!")
+// 8. Test Endpoints
+app.MapGet("/api/hello", () => "Hello from .NET API!").WithOpenApi();
+app.MapGet("/api/protected", () => "Secret data")
+   .RequireAuthorization()
    .WithOpenApi();
 
 app.Run();
-
-
-
