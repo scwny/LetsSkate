@@ -17,6 +17,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(opts =>
     })
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
+builder.Services.AddAuthorization();
 
 // 3. Configure the auth cookie
 builder.Services.ConfigureApplicationCookie(opts =>
